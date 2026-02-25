@@ -1,6 +1,6 @@
 import 'package:expenses_app/Models/expanses.dart';
 import 'package:expenses_app/widgets/chart/chart.dart';
-import 'package:expenses_app/widgets/expanses%20list/expanses_list.dart';
+import 'package:expenses_app/widgets/expanses list/expanses_list.dart';
 import 'package:expenses_app/widgets/new_expanses.dart';
 import 'package:flutter/material.dart';
 
@@ -40,12 +40,14 @@ class _ExpansesState extends State<Expanses> {
   ];
 
   void _addExpanses(Expansesmodel expanses) {
-    _registeredExpanses.add(expanses);
+    setState(() {
+      _registeredExpanses.add(expanses);
+    });
   }
 
   void _removeExpanses(Expansesmodel expanses) {
     setState(() {
-      _registeredExpanses.remove((expanses));
+      _registeredExpanses.remove(expanses);
     });
   }
 
@@ -59,10 +61,11 @@ class _ExpansesState extends State<Expanses> {
             onPressed: () {
               showModalBottomSheet(
                 context: context,
+                isScrollControlled: true,
                 builder: (_) => NewExpanses(onAddExpanses: _addExpanses),
               );
             },
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
           ),
         ],
       ),

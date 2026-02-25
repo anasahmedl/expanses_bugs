@@ -44,7 +44,7 @@ class _NewExpansesState extends State<NewExpanses> {
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     labelText: 'Amount',
-                    prefixText: '\$',
+                    prefixText: '\$ ',
                   ),
                 ),
               ),
@@ -72,8 +72,10 @@ class _NewExpansesState extends State<NewExpanses> {
                           lastDate: now,
                         );
 
-                        // 🐞 BUG 1: نسينا setState
-                        _selectedDate = pickdata;
+                          // 🐞 BUG 1: نسينا setState
+                        setState(() {
+                          _selectedDate = pickdata;
+                        });
                       },
                       icon: const Icon(Icons.calendar_month),
                     ),
@@ -93,28 +95,31 @@ class _NewExpansesState extends State<NewExpanses> {
                   );
                 }).toList(),
                 onChanged: (newvalue) {
+                  if (newvalue == null) return;
                   setState(() {
-                    _selectedCategory = newvalue as Category;
+                    _selectedCategory = newvalue;
                   });
                 },
               ),
+              const Spacer(),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
                 child: const Text('Cancel'),
               ),
+              const SizedBox(width: 8),
               ElevatedButton(
                 onPressed: () {
                   final double? enteredAmount =
                       double.tryParse(_amountcontroller.text);
 
-                  // 🐞 BUG 2: شرط معكوس
+                       // 🐞 BUG 2: شرط معكوس
                   final bool amountisvalid =
                       enteredAmount != null && enteredAmount > 0;
 
                   if (_titlecontroller.text.trim().isEmpty ||
-                      amountisvalid ||
+                      !amountisvalid ||
                       _selectedDate == null) {
                     return;
                   }
@@ -128,15 +133,8 @@ class _NewExpansesState extends State<NewExpanses> {
                     ),
                   );
 
-                  // 🐞 BUG 3: بدل ما يقفل بيروح يفتح صفحة تانية
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (ctx) => const Scaffold(
-                        body: Center(child: Text("Wrong Navigation 😅")),
-                      ),
-                    ),
-                  );
+              // 🐞 BUG 3: بدل ما يقفل بيروح يفتح صفحة تانية
+                  Navigator.pop(context);
                 },
                 child: const Text('Save Expanses'),
               ),

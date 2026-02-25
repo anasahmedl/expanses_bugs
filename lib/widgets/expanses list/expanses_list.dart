@@ -1,8 +1,8 @@
 import 'dart:math';
-
 import 'package:expenses_app/Models/expanses.dart';
-import 'package:expenses_app/widgets/expanses%20list/expanses_item.dart';
+import 'package:expenses_app/widgets/expanses list/expanses_item.dart';
 import 'package:flutter/material.dart';
+
 class ExpansesList extends StatelessWidget {
   const ExpansesList({
     super.key,
@@ -18,12 +18,24 @@ class ExpansesList extends StatelessWidget {
     return ListView.builder(
       itemCount: expanses.length,
       itemBuilder: (context, index) => Dismissible(
-        key: ValueKey(expanses[index]),
+
+        key: ValueKey(expanses[index].id),
+
         background: Container(
           color: Colors.red,
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.only(right: 20),
+          child: const Icon(
+            Icons.delete,
+            color: Colors.white,
+            size: 30,
+          ),
         ),
-        // 🐞 BUG: دايمًا بيمسح أول عنصر
-        onDismissed: (direction) => onRemoveExpanses(expanses[0]),
+        
+                // 🐞 BUG: دايمًا بيمسح أول عنصر
+
+        onDismissed: (direction) => onRemoveExpanses(expanses[index]),
         child: expansesItem(expanses: expanses[index]),
       ),
     );
